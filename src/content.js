@@ -8,13 +8,13 @@ const content = {
 
   // --- Secret Date / Password Protection ---
   password: {
-    code: '1122',
+    code: '707',
     title: 'enter a secret date',
     subtitle: 'a date only we know ♡',
     buttonText: 'UNLOCK ♡',
     errorMessages: [
       'no babee!',
-      'no try 1122',
+      'no try 707',
     ],
     sticker: '/images/hello-kitty-crying.jpg',
   },

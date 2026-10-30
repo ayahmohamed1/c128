@@ -25,13 +25,14 @@ const LockHeartIcon = () => (
 
 export default function PasswordPage({ onSuccess, content }) {
   const p = content?.password || {}
-  const targetCode = String(p.code || '1122').trim()
+  const targetCode = String(p.code || '707').trim()
+  const codeLength = targetCode.length
   const stickerSrc = p.sticker || '/images/hello-kitty-crying.jpg'
   const errorMessages = Array.isArray(p.errorMessages) && p.errorMessages.length > 0
     ? p.errorMessages
     : [
         'no babee!',
-        'no try 1122',
+        `no try ${targetCode}`,
       ]
 
   const [pin, setPin] = useState('')
@@ -48,12 +49,12 @@ export default function PasswordPage({ onSuccess, content }) {
     inputRef.current?.focus()
   }, [])
 
-  // Convert Arabic numerals to Western digits
+  // Convert Arabic numerals to Western digits and limit to code length
   const normalizeDigits = (str) => {
     return str
       .replace(/[٠-٩]/g, (d) => '٠١٢٣٤٥٦٧٨٩'.indexOf(d))
       .replace(/[^0-9]/g, '')
-      .slice(0, 4)
+      .slice(0, codeLength)
   }
 
   const handleVerify = (codeToVerify) => {
@@ -92,7 +93,7 @@ export default function PasswordPage({ onSuccess, content }) {
     const cleaned = normalizeDigits(raw)
     setPin(cleaned)
 
-    if (cleaned.length === 4) {
+    if (cleaned.length === codeLength) {
       handleVerify(cleaned)
     }
   }
@@ -103,7 +104,7 @@ export default function PasswordPage({ onSuccess, content }) {
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    if (pin.length === 4) {
+    if (pin.length === codeLength) {
       handleVerify(pin)
     } else {
       setBoxesError(true)
@@ -159,11 +160,11 @@ export default function PasswordPage({ onSuccess, content }) {
               className={styles.hiddenInput}
               value={pin}
               onChange={handleChange}
-              maxLength={4}
+              maxLength={codeLength}
               autoFocus
             />
 
-            {[0, 1, 2, 3].map((index) => {
+            {Array.from({ length: codeLength }, (_, index) => {
               const char = pin[index]
               const isFilled = char !== undefined
               const isActive = pin.length === index && !success && !boxesError
